@@ -33,13 +33,6 @@ abstract class FilterContract
         // Определяет функцию запроса по умолчанию
         $queryFunction = $allowedFilter['query_function'] ?? 'where';
 
-        // Обрабатывает случай, если значение является массивом
-        if (is_array($value)) {
-            $firstKey = array_key_first($value);
-            $value = $value[$firstKey];
-            $queryFunction = $firstKey;
-        }
-
         // Вызывает соответствующий метод фильтрации на основе карты методов
         return call_user_func(
             [$this, $this->methodsMap[$queryFunction]],
