@@ -174,30 +174,6 @@ abstract class AbstractRepository implements BaseRepositoryInterface
     }
 
     /**
-     * Устанавливает сортировку для запроса.
-     *
-     * @param array $sorts Параметры сортировки
-     * @return self
-     */
-    public function setQuerySorts(array $sorts): self
-    {
-        $this->setSort($this->getQuery(), $sorts);
-        return $this;
-    }
-
-    /**
-     * Устанавливает фильтры для запроса.
-     *
-     * @param array $filters Параметры фильтрации
-     * @return self
-     */
-    public function setQueryFilters(array $filters): self
-    {
-        $this->setFilter($this->getQuery(), $filters);
-        return $this;
-    }
-
-    /**
      * Находит первую запись с указанными атрибутами или создает новую запись, если она не найдена.
      *
      * @param array $attributes Атрибуты для поиска записи
