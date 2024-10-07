@@ -22,6 +22,13 @@ trait FilterRepositoryTrait
     protected array $systemFilters = [];
 
     /**
+     * Фильтры запроса, действуют только в 1 запросе.
+     *
+     * @var array
+     */
+    protected array $queryFilters = [];
+
+    /**
      * Устанавливает разрешенные фильтры для запроса.
      *
      * @return array Разрешенные фильтры
@@ -44,14 +51,12 @@ trait FilterRepositoryTrait
     /**
      * Устанавливает фильтры для запроса.
      *
-     * Фильтры, переданные в методе, будут объединены с системными фильтрами и фильтрами из запроса.
-     *
      * @param array $filters Фильтры для установки
      * @return self Возвращает текущий экземпляр класса
      */
     public function setQueryFilters(array $filters): self
     {
-        $this->systemFilters = array_merge($filters, $this->systemFilters);
+        $this->queryFilters = $filters;
         return $this;
     }
 
@@ -68,10 +73,14 @@ trait FilterRepositoryTrait
     {
         $allowedFilters = array_reduce($this->setAllowedFilters(), fn($carry, $item) => array_merge($carry, $item), []);
 
-        return FilterBuilder::build(
+        $query = FilterBuilder::build(
             $query,
-            array_merge($filters, request()->get('filters', []), $this->setSystemFilters()),
+            array_merge($filters, request()->get('filters', []), $this->queryFilters, $this->setSystemFilters()),
             $allowedFilters
         );
+
+        $this->queryFilters = [];
+
+        return $query;
     }
 }

@@ -76,6 +76,10 @@ trait SortRepositoryTrait
             $defaultSorts = $this->setDefaultSorts();
         }
 
-        return SortBuilder::build($query, array_merge($defaultSorts, $sorts), $allowedSorts);
+        $query = SortBuilder::build($query, array_merge($defaultSorts, $sorts), $allowedSorts);
+
+        $this->querySorts = [];
+
+        return $query;
     }
 }

@@ -69,14 +69,14 @@ trait SelectFieldRepositoryTrait
         }
 
         $defaultFields = $this->queryFields;
-        if (empty($defaultFields)){
+        if (empty($defaultFields)) {
             $defaultFields = $this->setDefaultFields();
         }
 
         if (request() && request()->has('embed') && !empty(request()->has('embed'))) {
             $fieldList = array_merge($fieldList, $this->parseFields(request()->get('embed', '')));
         } elseif (request() && request()->has('extended') && !empty(request()->has('extended'))) {
-            if (empty($defaultFields)){
+            if (empty($defaultFields)) {
                 $defaultFields = $this->allowedFields;
             }
 
@@ -95,7 +95,11 @@ trait SelectFieldRepositoryTrait
 
         $allowedFields = collect($this->setAllowedFields())->collapse()->toArray();
 
-        return SelectFieldBuilder::build($query, $fieldList, $allowedFields);
+        $query = SelectFieldBuilder::build($query, $fieldList, $allowedFields);
+
+        $this->queryFields = [];
+
+        return $query;
     }
 
     /**
